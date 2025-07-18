@@ -1,4 +1,4 @@
-import { Calendar, Edit2, Trash2, Gift } from 'lucide-react'
+import { Calendar, Edit2, Trash2, Gift, Pencil } from 'lucide-react'
 import { format } from 'date-fns'
 import { ko } from 'date-fns/locale/ko'
 import { useMemo } from 'react'
@@ -103,23 +103,27 @@ function GratitudeList({ gratitudes, onEdit, onDelete }) {
                         : gratitude.content}
                     </span>
                   </div>
-                  <span className="text-sm text-gray-500">
-                    {format(new Date(gratitude.date), 'yyyy.MM.dd', { locale: ko })}
-                  </span>
-                </div>
-                <div className="flex justify-end gap-2 mt-3">
-                  <button
-                    onClick={() => onEdit(gratitude)}
-                    className="px-3 py-1.5 text-sm text-amber-700 bg-amber-100 hover:bg-amber-200 rounded-lg transition-all duration-200 font-medium hover:shadow-md"
-                  >
-                    수정하기
-                  </button>
-                  <button
-                    onClick={() => onDelete(gratitude.id)}
-                    className="px-3 py-1.5 text-sm text-gray-500 bg-gray-100 hover:bg-gray-200 rounded-lg transition-all duration-200"
-                  >
-                    삭제하기
-                  </button>
+                  <div className="flex items-center gap-3">
+                    <span className="text-sm text-gray-500">
+                      {format(new Date(gratitude.date), 'yyyy.MM.dd', { locale: ko })}
+                    </span>
+                    <div className="flex items-center gap-1">
+                      <button
+                        onClick={() => onEdit(gratitude)}
+                        className="p-1.5 text-amber-600 hover:bg-amber-100 rounded-lg transition-all duration-200"
+                        title="수정하기"
+                      >
+                        <Pencil className="w-4 h-4" />
+                      </button>
+                      <button
+                        onClick={() => onDelete(gratitude.id)}
+                        className="p-1.5 text-gray-500 hover:bg-red-50 hover:text-red-500 rounded-lg transition-all duration-200"
+                        title="삭제하기"
+                      >
+                        <Trash2 className="w-4 h-4" />
+                      </button>
+                    </div>
+                  </div>
                 </div>
               </div>
             ))}
