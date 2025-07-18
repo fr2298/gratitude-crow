@@ -3,12 +3,13 @@ import { X, Camera, Plus, Trash2 } from 'lucide-react'
 
 function GratitudeForm({ gratitude, onSave, onClose }) {
   const [formData, setFormData] = useState({
-    name: gratitude?.name || '',
     date: gratitude?.date || new Date().toISOString().split('T')[0],
     content: gratitude?.content || '',
+    name: gratitude?.name || '',
+    nickname: gratitude?.nickname || '',
+    anniversaries: gratitude?.anniversaries || [],
     memo: gratitude?.memo || '',
-    photos: gratitude?.photos || [],
-    anniversaries: gratitude?.anniversaries || []
+    photos: gratitude?.photos || []
   })
 
   const handleSubmit = (e) => {
@@ -83,19 +84,6 @@ function GratitudeForm({ gratitude, onSave, onClose }) {
         <form onSubmit={handleSubmit} className="p-6 space-y-6">
           <div>
             <label className="block text-sm font-medium text-gray-700 mb-2">
-              은인 이름 *
-            </label>
-            <input
-              type="text"
-              value={formData.name}
-              onChange={(e) => setFormData(prev => ({ ...prev, name: e.target.value }))}
-              className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary"
-              placeholder="홍길동"
-            />
-          </div>
-
-          <div>
-            <label className="block text-sm font-medium text-gray-700 mb-2">
               은혜받은 날짜 *
             </label>
             <input
@@ -121,60 +109,34 @@ function GratitudeForm({ gratitude, onSave, onClose }) {
 
           <div>
             <label className="block text-sm font-medium text-gray-700 mb-2">
-              메모
+              은인 이름 *
             </label>
-            <textarea
-              value={formData.memo}
-              onChange={(e) => setFormData(prev => ({ ...prev, memo: e.target.value }))}
+            <input
+              type="text"
+              value={formData.name}
+              onChange={(e) => setFormData(prev => ({ ...prev, name: e.target.value }))}
               className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary"
-              rows="2"
-              placeholder="추가로 기억하고 싶은 내용"
+              placeholder="홍길동"
             />
           </div>
 
           <div>
             <label className="block text-sm font-medium text-gray-700 mb-2">
-              사진 첨부
+              은인 별칭
             </label>
-            <div className="space-y-2">
-              <label className="flex items-center justify-center gap-2 w-full px-4 py-2 border-2 border-dashed border-gray-300 rounded-lg cursor-pointer hover:border-primary transition-colors">
-                <Camera className="w-5 h-5 text-gray-500" />
-                <span className="text-gray-500">사진 선택</span>
-                <input
-                  type="file"
-                  accept="image/*"
-                  multiple
-                  onChange={handlePhotoUpload}
-                  className="hidden"
-                />
-              </label>
-              {formData.photos.length > 0 && (
-                <div className="grid grid-cols-3 gap-2">
-                  {formData.photos.map((photo, index) => (
-                    <div key={index} className="relative group">
-                      <img
-                        src={photo}
-                        alt={`사진 ${index + 1}`}
-                        className="w-full h-24 object-cover rounded-lg"
-                      />
-                      <button
-                        type="button"
-                        onClick={() => removePhoto(index)}
-                        className="absolute top-1 right-1 p-1 bg-red-500 text-white rounded-full opacity-0 group-hover:opacity-100 transition-opacity"
-                      >
-                        <X className="w-3 h-3" />
-                      </button>
-                    </div>
-                  ))}
-                </div>
-              )}
-            </div>
+            <input
+              type="text"
+              value={formData.nickname}
+              onChange={(e) => setFormData(prev => ({ ...prev, nickname: e.target.value }))}
+              className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary"
+              placeholder="선생님, 사장님 등"
+            />
           </div>
 
           <div>
             <div className="flex items-center justify-between mb-2">
               <label className="text-sm font-medium text-gray-700">
-                기념일
+                은인 기념일
               </label>
               <button
                 type="button"
@@ -214,6 +176,58 @@ function GratitudeForm({ gratitude, onSave, onClose }) {
               ))}
               {formData.anniversaries.length > 0 && (
                 <p className="text-xs text-gray-500">날짜는 MM-DD 형식으로 입력 (예: 03-15)</p>
+              )}
+            </div>
+          </div>
+
+          <div>
+            <label className="block text-sm font-medium text-gray-700 mb-2">
+              은인 메모
+            </label>
+            <textarea
+              value={formData.memo}
+              onChange={(e) => setFormData(prev => ({ ...prev, memo: e.target.value }))}
+              className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary"
+              rows="2"
+              placeholder="추가로 기억하고 싶은 내용"
+            />
+          </div>
+
+          <div>
+            <label className="block text-sm font-medium text-gray-700 mb-2">
+              사진
+            </label>
+            <div className="space-y-2">
+              <label className="flex items-center justify-center gap-2 w-full px-4 py-2 border-2 border-dashed border-gray-300 rounded-lg cursor-pointer hover:border-primary transition-colors">
+                <Camera className="w-5 h-5 text-gray-500" />
+                <span className="text-gray-500">사진 선택</span>
+                <input
+                  type="file"
+                  accept="image/*"
+                  multiple
+                  onChange={handlePhotoUpload}
+                  className="hidden"
+                />
+              </label>
+              {formData.photos.length > 0 && (
+                <div className="grid grid-cols-3 gap-2">
+                  {formData.photos.map((photo, index) => (
+                    <div key={index} className="relative group">
+                      <img
+                        src={photo}
+                        alt={`사진 ${index + 1}`}
+                        className="w-full h-24 object-cover rounded-lg"
+                      />
+                      <button
+                        type="button"
+                        onClick={() => removePhoto(index)}
+                        className="absolute top-1 right-1 p-1 bg-red-500 text-white rounded-full opacity-0 group-hover:opacity-100 transition-opacity"
+                      >
+                        <X className="w-3 h-3" />
+                      </button>
+                    </div>
+                  ))}
+                </div>
               )}
             </div>
           </div>
