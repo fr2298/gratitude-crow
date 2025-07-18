@@ -101,20 +101,20 @@ function GratitudeList({ gratitudes, onEdit, onDelete }) {
                         : gratitude.content}
                     </span>
                   </div>
-                  <span className="text-xs text-gray-500">
+                  <span className="text-sm text-gray-500">
                     {format(new Date(gratitude.date), 'yyyy.MM.dd', { locale: ko })}
                   </span>
                 </div>
-                <div className="flex justify-end gap-2 mt-1">
+                <div className="flex justify-end gap-2 mt-3">
                   <button
                     onClick={() => onEdit(gratitude)}
-                    className="text-sm text-gray-600 hover:text-gray-800 hover:underline"
+                    className="px-3 py-1 text-sm text-gray-600 bg-amber-100 hover:bg-amber-200 rounded-lg transition-colors"
                   >
                     수정하기
                   </button>
                   <button
                     onClick={() => onDelete(gratitude.id)}
-                    className="text-sm text-red-500 hover:text-red-700 hover:underline"
+                    className="px-3 py-1 text-sm text-gray-400 bg-gray-100 hover:bg-gray-200 rounded-lg transition-colors"
                   >
                     삭제하기
                   </button>
