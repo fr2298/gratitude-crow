@@ -46,7 +46,7 @@ function GratitudeForm({ gratitude, onSave, onClose }) {
   const addAnniversary = () => {
     setFormData(prev => ({
       ...prev,
-      anniversaries: [...prev.anniversaries, { type: '', date: '' }]
+      anniversaries: [...prev.anniversaries, { type: '', date: '', isRecurring: true }]
     }))
   }
 
@@ -149,34 +149,58 @@ function GratitudeForm({ gratitude, onSave, onClose }) {
             </div>
             <div className="space-y-2">
               {formData.anniversaries.map((anniversary, index) => (
-                <div key={index} className="flex items-center gap-2">
-                  <input
-                    type="text"
-                    value={anniversary.type}
-                    onChange={(e) => updateAnniversary(index, 'type', e.target.value)}
-                    placeholder="생일"
-                    className="flex-1 px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary"
-                  />
-                  <input
-                    type="text"
-                    value={anniversary.date}
-                    onChange={(e) => updateAnniversary(index, 'date', e.target.value)}
-                    placeholder="MM-DD"
-                    pattern="\d{2}-\d{2}"
-                    className="w-24 px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary"
-                  />
-                  <button
-                    type="button"
-                    onClick={() => removeAnniversary(index)}
-                    className="p-2 text-red-500 hover:bg-red-50 rounded-lg"
-                  >
-                    <Trash2 className="w-4 h-4" />
-                  </button>
+                <div key={index} className="space-y-2 p-3 bg-gray-50 rounded-lg">
+                  <div className="flex items-center gap-2">
+                    <input
+                      type="text"
+                      value={anniversary.type}
+                      onChange={(e) => updateAnniversary(index, 'type', e.target.value)}
+                      placeholder="기념일 이름 (예: 생일, 결혼기념일)"
+                      className="flex-1 px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary"
+                    />
+                    <button
+                      type="button"
+                      onClick={() => removeAnniversary(index)}
+                      className="p-2 text-red-500 hover:bg-red-50 rounded-lg"
+                    >
+                      <Trash2 className="w-4 h-4" />
+                    </button>
+                  </div>
+                  <div className="flex items-center gap-3">
+                    <label className="flex items-center gap-2">
+                      <input
+                        type="radio"
+                        name={`anniversary-type-${index}`}
+                        checked={anniversary.isRecurring !== false}
+                        onChange={() => updateAnniversary(index, 'isRecurring', true)}
+                        className="text-primary focus:ring-primary"
+                      />
+                      <span className="text-sm">반복일 (예: 생일)</span>
+                    </label>
+                    <label className="flex items-center gap-2">
+                      <input
+                        type="radio"
+                        name={`anniversary-type-${index}`}
+                        checked={anniversary.isRecurring === false}
+                        onChange={() => updateAnniversary(index, 'isRecurring', false)}
+                        className="text-primary focus:ring-primary"
+                      />
+                      <span className="text-sm">지정일 (예: 정년퇴직)</span>
+                    </label>
+                  </div>
+                  <div>
+                    <input
+                      type="date"
+                      value={anniversary.date}
+                      onChange={(e) => updateAnniversary(index, 'date', e.target.value)}
+                      className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary"
+                    />
+                    {anniversary.isRecurring !== false && (
+                      <p className="text-xs text-gray-500 mt-1">년도를 신경쓰지 마세요</p>
+                    )}
+                  </div>
                 </div>
               ))}
-              {formData.anniversaries.length > 0 && (
-                <p className="text-xs text-gray-500">날짜는 MM-DD 형식으로 입력 (예: 03-15)</p>
-              )}
             </div>
           </div>
 

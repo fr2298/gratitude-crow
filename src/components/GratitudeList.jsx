@@ -65,7 +65,7 @@ function GratitudeList({ gratitudes, onEdit, onDelete }) {
 
           {/* 은인 이름 / 별칭 */}
           <div className="mb-3">
-            <h3 className="text-lg font-semibold text-gray-800">
+            <h3 className="text-xl font-semibold text-gray-800">
               {group.name} {group.nickname && `/ ${group.nickname}`}
             </h3>
           </div>
@@ -77,7 +77,12 @@ function GratitudeList({ gratitudes, onEdit, onDelete }) {
                 <div key={index} className="flex items-center gap-2 text-sm text-gray-600">
                   <Calendar className="w-4 h-4" />
                   <span className="font-medium">{ann.type}</span>
-                  <span>{ann.date}</span>
+                  <span>
+                    {ann.isRecurring !== false 
+                      ? format(new Date(ann.date), 'M월 d일', { locale: ko })
+                      : format(new Date(ann.date), 'yyyy년 M월 d일', { locale: ko })
+                    }
+                  </span>
                 </div>
               ))}
             </div>
@@ -87,32 +92,32 @@ function GratitudeList({ gratitudes, onEdit, onDelete }) {
           <div className="space-y-2">
             {group.gratitudes.slice(0, 3).map((gratitude, index) => (
               <div key={gratitude.id} className="border-t pt-2">
-                <div className="flex items-center gap-2">
-                  <img src="/heart_icon.png" alt="heart" className="w-4 h-4" />
-                  <span className="text-sm text-gray-700">
-                    {gratitude.content.length > 10 
-                      ? gratitude.content.substring(0, 10) + '...' 
-                      : gratitude.content}
-                  </span>
-                </div>
-                <div className="flex items-center gap-2 mt-1">
+                <div className="flex items-center justify-between gap-2">
+                  <div className="flex items-center gap-2">
+                    <img src="/heart_icon.png" alt="heart" className="w-4 h-4" />
+                    <span className="text-sm text-gray-700">
+                      {gratitude.content.length > 10 
+                        ? gratitude.content.substring(0, 10) + '...' 
+                        : gratitude.content}
+                    </span>
+                  </div>
                   <span className="text-xs text-gray-500">
                     {format(new Date(gratitude.date), 'yyyy.MM.dd', { locale: ko })}
                   </span>
-                  <div className="ml-auto flex gap-1">
-                    <button
-                      onClick={() => onEdit(gratitude)}
-                      className="p-1 hover:bg-gray-100 rounded transition-colors"
-                    >
-                      <Edit2 className="w-3 h-3 text-gray-600" />
-                    </button>
-                    <button
-                      onClick={() => onDelete(gratitude.id)}
-                      className="p-1 hover:bg-red-50 rounded transition-colors"
-                    >
-                      <Trash2 className="w-3 h-3 text-red-500" />
-                    </button>
-                  </div>
+                </div>
+                <div className="flex justify-end gap-2 mt-1">
+                  <button
+                    onClick={() => onEdit(gratitude)}
+                    className="text-sm text-gray-600 hover:text-gray-800 hover:underline"
+                  >
+                    수정하기
+                  </button>
+                  <button
+                    onClick={() => onDelete(gratitude.id)}
+                    className="text-sm text-red-500 hover:text-red-700 hover:underline"
+                  >
+                    삭제하기
+                  </button>
                 </div>
               </div>
             ))}
