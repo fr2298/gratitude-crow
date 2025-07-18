@@ -1,7 +1,7 @@
-import { useState } from 'react'
+import { useState, useMemo } from 'react'
 import { X, Camera, Plus, Trash2 } from 'lucide-react'
 
-function GratitudeForm({ gratitude, onSave, onClose }) {
+function GratitudeForm({ gratitude, existingGratitudes = [], onSave, onClose }) {
   const [formData, setFormData] = useState({
     date: gratitude?.date || new Date().toISOString().split('T')[0],
     content: gratitude?.content || '',
@@ -11,6 +11,35 @@ function GratitudeForm({ gratitude, onSave, onClose }) {
     memo: gratitude?.memo || '',
     photos: gratitude?.photos || []
   })
+  
+  const [showSuggestions, setShowSuggestions] = useState(false)
+
+  // 은인 이름 자동완성을 위한 고유 이름 목록
+  const uniqueNames = useMemo(() => {
+    const names = new Set()
+    existingGratitudes.forEach(g => {
+      if (g.name) names.add(g.name)
+    })
+    return Array.from(names)
+  }, [existingGratitudes])
+
+  // 입력된 이름에 따른 추천 목록
+  const suggestions = useMemo(() => {
+    if (!formData.name) return []
+    return uniqueNames
+      .filter(name => name.toLowerCase().includes(formData.name.toLowerCase()))
+      .slice(0, 3)
+  }, [formData.name, uniqueNames])
+
+  const handleNameChange = (e) => {
+    setFormData(prev => ({ ...prev, name: e.target.value }))
+    setShowSuggestions(true)
+  }
+
+  const selectSuggestion = (name) => {
+    setFormData(prev => ({ ...prev, name }))
+    setShowSuggestions(false)
+  }
 
   const handleSubmit = (e) => {
     e.preventDefault()
@@ -82,6 +111,48 @@ function GratitudeForm({ gratitude, onSave, onClose }) {
         </div>
 
         <form onSubmit={handleSubmit} className="p-6 space-y-6">
+          <div className="relative">
+            <label className="block text-sm font-medium text-gray-700 mb-2">
+              은인 이름 *
+            </label>
+            <input
+              type="text"
+              value={formData.name}
+              onChange={handleNameChange}
+              onFocus={() => setShowSuggestions(true)}
+              onBlur={() => setTimeout(() => setShowSuggestions(false), 200)}
+              className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary"
+              placeholder="홍길동"
+            />
+            {showSuggestions && suggestions.length > 0 && (
+              <div className="absolute z-10 w-full mt-1 bg-white border border-gray-300 rounded-lg shadow-lg">
+                {suggestions.map((name, index) => (
+                  <button
+                    key={index}
+                    type="button"
+                    className="w-full px-3 py-2 text-left hover:bg-gray-100 focus:bg-gray-100"
+                    onMouseDown={() => selectSuggestion(name)}
+                  >
+                    {name}
+                  </button>
+                ))}
+              </div>
+            )}
+          </div>
+
+          <div>
+            <label className="block text-sm font-medium text-gray-700 mb-2">
+              은인 별칭
+            </label>
+            <input
+              type="text"
+              value={formData.nickname}
+              onChange={(e) => setFormData(prev => ({ ...prev, nickname: e.target.value }))}
+              className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary"
+              placeholder="선생님, 사장님 등"
+            />
+          </div>
+
           <div>
             <label className="block text-sm font-medium text-gray-700 mb-2">
               은혜받은 날짜 *
@@ -104,32 +175,6 @@ function GratitudeForm({ gratitude, onSave, onClose }) {
               className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary"
               rows="3"
               placeholder="어떤 도움을 받으셨나요?"
-            />
-          </div>
-
-          <div>
-            <label className="block text-sm font-medium text-gray-700 mb-2">
-              은인 이름 *
-            </label>
-            <input
-              type="text"
-              value={formData.name}
-              onChange={(e) => setFormData(prev => ({ ...prev, name: e.target.value }))}
-              className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary"
-              placeholder="홍길동"
-            />
-          </div>
-
-          <div>
-            <label className="block text-sm font-medium text-gray-700 mb-2">
-              은인 별칭
-            </label>
-            <input
-              type="text"
-              value={formData.nickname}
-              onChange={(e) => setFormData(prev => ({ ...prev, nickname: e.target.value }))}
-              className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary"
-              placeholder="선생님, 사장님 등"
             />
           </div>
 

@@ -1,8 +1,8 @@
-const STORAGE_KEY = 'gratitude_crow_data'
+const STORAGE_KEY_PREFIX = 'gratitudes_'
 
-export const loadGratitudes = () => {
+export const loadGratitudes = (userId = 'guest') => {
   try {
-    const data = localStorage.getItem(STORAGE_KEY)
+    const data = localStorage.getItem(`${STORAGE_KEY_PREFIX}${userId}`)
     return data ? JSON.parse(data) : []
   } catch (error) {
     console.error('데이터 로드 실패:', error)
@@ -10,9 +10,9 @@ export const loadGratitudes = () => {
   }
 }
 
-export const saveGratitudes = (gratitudes) => {
+export const saveGratitudes = (gratitudes, userId = 'guest') => {
   try {
-    localStorage.setItem(STORAGE_KEY, JSON.stringify(gratitudes))
+    localStorage.setItem(`${STORAGE_KEY_PREFIX}${userId}`, JSON.stringify(gratitudes))
     return true
   } catch (error) {
     console.error('데이터 저장 실패:', error)
