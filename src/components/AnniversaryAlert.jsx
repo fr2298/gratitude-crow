@@ -52,9 +52,9 @@ function AnniversaryAlert({ gratitudes }) {
   }
 
   const getAlertColor = (daysUntil) => {
-    if (daysUntil === 0) return 'bg-red-100 border-red-300 text-red-800'
-    if (daysUntil <= 7) return 'bg-orange-100 border-orange-300 text-orange-800'
-    return 'bg-blue-100 border-blue-300 text-blue-800'
+    if (daysUntil === 0) return 'bg-gradient-to-r from-red-50 to-red-100 border-red-300 text-red-700'
+    if (daysUntil <= 7) return 'bg-gradient-to-r from-amber-50 to-orange-100 border-amber-300 text-amber-700'
+    return 'bg-gradient-to-r from-blue-50 to-sky-100 border-blue-300 text-blue-700'
   }
 
   const getDaysText = (daysUntil) => {
@@ -68,7 +68,7 @@ function AnniversaryAlert({ gratitudes }) {
       {upcomingAnniversaries.slice(0, 3).map((anniversary, index) => (
         <div
           key={`${anniversary.name}-${anniversary.type}-${index}`}
-          className={`rounded-lg border p-4 flex items-center justify-between ${getAlertColor(anniversary.daysUntil)}`}
+          className={`rounded-xl border-2 p-4 flex items-center justify-between shadow-md hover:shadow-lg transition-all duration-200 ${getAlertColor(anniversary.daysUntil)}`}
         >
           <div className="flex items-center gap-3">
             <div className="flex items-center gap-2">
@@ -91,7 +91,7 @@ function AnniversaryAlert({ gratitudes }) {
           {index === 0 && (
             <button
               onClick={() => setShowAlert(false)}
-              className="p-1 hover:bg-white hover:bg-opacity-50 rounded transition-colors"
+              className="p-1.5 hover:bg-white/50 rounded-lg transition-all duration-200"
             >
               <X className="w-4 h-4" />
             </button>
@@ -99,8 +99,8 @@ function AnniversaryAlert({ gratitudes }) {
         </div>
       ))}
       {upcomingAnniversaries.length > 3 && (
-        <p className="text-sm text-gray-600 text-center">
-          외 {upcomingAnniversaries.length - 3}개의 기념일이 다가오고 있습니다.
+        <p className="text-sm text-amber-600 text-center font-medium">
+          + {upcomingAnniversaries.length - 3}개의 기념일이 다가오고 있습니다.
         </p>
       )}
     </div>
