@@ -116,6 +116,13 @@ function Login() {
             비밀번호를 잊으셨나요?
           </Link>
         </div>
+        
+        <div className="mt-8 p-4 bg-amber-50 rounded-xl border border-amber-200">
+          <p className="text-xs text-amber-700 text-center leading-relaxed">
+            ⚠️ 프로토타입 버전으로 인터넷 방문기록 / 쿠키 / 사이트 데이터 삭제 시<br />
+            기록 내용도 함께 삭제되며 다른 기기에서는 공유가 안됩니다
+          </p>
+        </div>
       </div>
     </div>
   )
